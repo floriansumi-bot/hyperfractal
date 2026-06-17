@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js");</script>
+  <title>HyperFractal — psychedelic audio-reactive fractal visualizer</title>
+  <meta name="description" content="Infinite-zoom psychedelic fractals that react to any sound — built for raves, parties and projection mapping. Real-time WebGL, runs entirely in your browser. A portfolio project by Florian Sumi." />
+  <meta name="theme-color" content="#070512" />
+  <meta name="color-scheme" content="dark" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="HyperFractal — psychedelic audio-reactive visualizer" />
+  <meta property="og:description" content="Infinite-zoom fractals that dance to the music. Real-time WebGL for raves, parties and projection mapping — right in your browser." />
+  <meta property="og:image" content="assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HyperFractal — psychedelic audio-reactive visualizer" />
+  <meta name="twitter:description" content="Infinite-zoom fractals that dance to the music. Real-time WebGL, in your browser." />
+  <meta name="twitter:image" content="assets/og-image.png" />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ NAV ============ -->
+  <header class="topbar" id="top">
+    <a class="brand" href="#top" aria-label="HyperFractal home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">HyperFractal</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#sound">Sound</a>
+      <a href="#visuals">Visuals</a>
+      <a href="#mapping">Projection</a>
+      <a href="#controls">Controls</a>
+      <a href="#tech">Tech</a>
+    </nav>
+    <div class="topbar-actions">
+      <a class="btn primary small" href="app.html" target="_blank" rel="noopener">Launch demo <span aria-hidden="true">↗</span></a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+    <a href="#sound">Sound</a>
+    <a href="#visuals">Visuals</a>
+    <a href="#mapping">Projection</a>
+    <a href="#controls">Controls</a>
+    <a href="#tech">Tech</a>
+    <a class="btn primary" href="app.html" target="_blank" rel="noopener">Launch demo ↗</a>
+  </nav>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <canvas id="bg" class="hero-bg" aria-hidden="true"></canvas>
+      <div class="hero-veil" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-art reveal" aria-hidden="true">
+          <img src="assets/mandala.png" alt="" width="320" height="320" loading="eager" />
+        </div>
+        <div class="hero-copy reveal">
+          <span class="eyebrow">Real-time WebGL · audio-reactive</span>
+          <h1>Fractals that <span class="grad">dance to the music.</span></h1>
+          <p class="lede">
+            Infinite-zoom psychedelic visuals that react to any sound — built for raves,
+            parties and projection mapping. No install, no account, nothing uploaded.
+            It all runs in your browser.
+          </p>
+          <div class="hero-cta">
+            <a class="btn primary big" href="app.html" target="_blank" rel="noopener">▶ Launch the live demo</a>
+            <a class="btn ghost" href="#visuals">What it does <span aria-hidden="true">→</span></a>
+          </div>
+          <p class="hero-hint">Tip: hit <kbd>Generate Psytrance</kbd> on the start screen — no files needed. Best in Chrome or Edge, on a desktop.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SOUND ============ -->
+    <section class="section" id="sound">
+      <div class="section-head reveal">
+        <span class="kicker">Feed it sound</span>
+        <h2>Four ways to drive the visuals.</h2>
+        <p>Pick a source on the start screen and the fractals lock onto the beat — the zoom speeds up with the bass and surges on every kick.</p>
+      </div>
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card-ico">🎛️</div>
+          <h3>Generate psytrance</h3>
+          <p>A built-in live psy jam — driving kick, rolling bass, hats and an acid lead. Nothing to load; just press play.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-ico">🎵</div>
+          <h3>Load a track</h3>
+          <p>Play any audio file from your machine — mp3, m4a, wav, flac — and watch it come alive.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-ico">🔊</div>
+          <h3>Computer audio</h3>
+          <p>Visualize whatever's already playing: Spotify, a DJ set, a YouTube stream — captured tab or system audio.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-ico">🎤</div>
+          <h3>Microphone</h3>
+          <p>React to the live room — speakers, a real DJ, instruments or voices, in real time.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ VISUALS ============ -->
+    <section class="section alt" id="visuals">
+      <div class="section-head reveal">
+        <span class="kicker">The visuals</span>
+        <h2>Five fractal worlds, endlessly zooming.</h2>
+        <p>Each style zooms inward forever and is rendered live on the GPU. They're “made of slime” — a wet glossy sheen plus jelly physics that squash and wobble on every kick.</p>
+      </div>
+      <ul class="styles reveal">
+        <li><span class="sw sw1"></span>Kali Tunnel</li>
+        <li><span class="sw sw2"></span>Kaleido Mandala</li>
+        <li><span class="sw sw3"></span>Hyper Plasma</li>
+        <li><span class="sw sw4"></span>Morph Julia</li>
+        <li><span class="sw sw5"></span>Apollonian Goo</li>
+      </ul>
+      <div class="feature-row">
+        <div class="feature reveal"><h3>Slime physics</h3><p>The whole image jiggles and recoils on the beat — off, soft or full.</p></div>
+        <div class="feature reveal"><h3>Vortex zoom</h3><p>Toggle a spiralling zoom for a hypnotic tunnel pull.</p></div>
+        <div class="feature reveal"><h3>5 colour skins</h3><p>Swap between five slime palettes — neon, acid, candy and more.</p></div>
+        <div class="feature reveal"><h3>Auto-cycle</h3><p>Let it drift through styles on its own for a hands-free set.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTION MAPPING ============ -->
+    <section class="section" id="mapping">
+      <div class="map-wrap">
+        <div class="section-head left reveal">
+          <span class="kicker">Projection mapping</span>
+          <h2>Fit the image to any wall, booth or object.</h2>
+          <p>Press <kbd>M</kbd> and four corner handles appear — drag each one until the visuals line up exactly with your surface, perfect for angled or keystoned projectors. Your mapping is saved automatically for next time.</p>
+          <p class="muted-note">Prefer Resolume or MadMapper? Run it fullscreen and capture the window as a source — or skip all that and use the built-in corner mapping.</p>
+        </div>
+        <div class="map-demo reveal" aria-hidden="true">
+          <div class="map-frame">
+            <img src="assets/mandala.png" alt="" />
+            <span class="handle tl"></span><span class="handle tr"></span>
+            <span class="handle bl"></span><span class="handle br"></span>
+          </div>
+          <span class="map-caption">drag the corners</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTROLS ============ -->
+    <section class="section alt" id="controls">
+      <div class="section-head reveal">
+        <span class="kicker">All controls</span>
+        <h2>Built for VJs — everything on the keyboard.</h2>
+        <p>Press <kbd>H</kbd> any time inside the app to show or hide the cheat-sheet.</p>
+      </div>
+      <div class="keys reveal">
+        <div class="key"><kbd>Space</kbd><span>Switch fractal style</span></div>
+        <div class="key"><kbd>A</kbd><span>Auto-cycle styles</span></div>
+        <div class="key"><kbd>P</kbd><span>Colour skin (5 palettes)</span></div>
+        <div class="key"><kbd>G</kbd><span>Slime — off / soft / full</span></div>
+        <div class="key"><kbd>−</kbd><kbd>=</kbd><span>Zoom speed</span></div>
+        <div class="key"><kbd>V</kbd><span>Vortex spiral on / off</span></div>
+        <div class="key"><kbd>↑</kbd><kbd>↓</kbd><span>More / less reactive</span></div>
+        <div class="key"><kbd>M</kbd><span>Projection-map corners</span></div>
+        <div class="key"><kbd>F</kbd><span>Fullscreen</span></div>
+        <div class="key"><kbd>N</kbd><span>New psytrance pattern</span></div>
+        <div class="key"><kbd>S</kbd><span>Save a screenshot</span></div>
+        <div class="key"><kbd>Esc</kbd><span>Back to start menu</span></div>
+      </div>
+    </section>
+
+    <!-- ============ TECH ============ -->
+    <section class="section" id="tech">
+      <div class="section-head reveal">
+        <span class="kicker">Under the hood</span>
+        <h2>One file. No libraries. No backend.</h2>
+      </div>
+      <div class="tech-grid">
+        <div class="tech reveal"><h3>WebGL shaders</h3><p>Every frame is a GLSL fragment shader running on the GPU — that's how the fractals stay smooth while zooming forever.</p></div>
+        <div class="tech reveal"><h3>Web Audio API</h3><p>An FFT analyser splits the sound into frequency bands so bass, kick and highs each drive different parts of the motion.</p></div>
+        <div class="tech reveal"><h3>Self-contained</h3><p>The whole visualizer is a single hand-written HTML file — no frameworks, no build step, nothing to install.</p></div>
+        <div class="tech reveal"><h3>Private by default</h3><p>Music and microphone are processed locally on your device. Nothing is ever uploaded or recorded.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-band reveal">
+      <h2>Turn the sound up.</h2>
+      <p>Best experienced fullscreen on a desktop, in Chrome or Edge — then press <kbd>Generate Psytrance</kbd>.</p>
+      <div class="hero-cta center">
+        <a class="btn primary big" href="app.html" target="_blank" rel="noopener">▶ Launch the live demo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">HyperFractal</span></div>
+      <p class="footer-note">Psychedelic audio-reactive visualizer · a portfolio project by Florian Sumi</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="app.html" target="_blank" rel="noopener">Launch demo</a>
+        <a href="#visuals">Visuals</a>
+        <a href="#tech">Tech</a>
+      </nav>
+    </div>
+    <p class="copyright">© <span id="year">2026</span> Florian Sumi · Runs entirely in your browser.</p>
+  </footer>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>

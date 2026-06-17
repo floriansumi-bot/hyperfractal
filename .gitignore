@@ -1,0 +1,8 @@
+# OS / editor cruft
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+*.local.*
+__pycache__/
+*.pyc
