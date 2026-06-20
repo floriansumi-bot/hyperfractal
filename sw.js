@@ -1,9 +1,10 @@
 /* HyperFractal — offline shell. Network-first for pages so updates show immediately. */
-const CACHE = "hyperfractal-v1";
+const CACHE = "hyperfractal-v2";
 const ASSETS = [
   "./",
   "./index.html",
   "./app.html",
+  "./samples.js",
   "./css/styles.css",
   "./js/app.js",
   "./assets/favicon.svg",
