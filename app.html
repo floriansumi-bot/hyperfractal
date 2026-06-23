@@ -14,8 +14,8 @@
   /* ---------- Start overlay ---------- */
   #overlay{
     position:fixed; inset:0; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; gap:24px;
-    background:radial-gradient(circle at 50% 40%, rgba(10,0,30,.35), rgba(0,0,0,.80) 70%);
+    align-items:center; justify-content:center; gap:16px;
+    background:radial-gradient(circle at 50% 38%, rgba(10,0,30,.28), rgba(0,0,0,.82) 72%);
     backdrop-filter:blur(2px); transition:opacity .8s ease; z-index:20; text-align:center;
   }
   #overlay.hidden{ opacity:0; pointer-events:none; }
@@ -43,6 +43,25 @@
   button.src small{ display:block; opacity:.62; font-weight:400; font-size:12px; margin-top:5px; }
   .legend{ font-size:12px; opacity:.55; margin-top:4px; }
   .err{ color:#ff7b9c; font-size:13px; max-width:600px; min-height:18px; padding:0 16px; }
+  /* ---------- opening screen extras ---------- */
+  .brand{ display:flex; align-items:center; gap:18px; }
+  .eqbars{ display:flex; align-items:flex-end; gap:4px; height:48px; }
+  .eqbars i{ width:6px; height:12px; border-radius:3px; background:linear-gradient(var(--neon1),var(--neon3));
+    box-shadow:0 0 10px rgba(0,240,255,.45); animation:eq 1.0s ease-in-out infinite; }
+  .eqbars i:nth-child(2){ animation-delay:.12s } .eqbars i:nth-child(3){ animation-delay:.24s }
+  .eqbars i:nth-child(4){ animation-delay:.36s } .eqbars i:nth-child(5){ animation-delay:.48s }
+  .eqbars i:nth-child(6){ animation-delay:.30s } .eqbars i:nth-child(7){ animation-delay:.18s }
+  @keyframes eq{ 0%,100%{ height:10px; opacity:.65 } 50%{ height:44px; opacity:1 } }
+  .tag{ font-size:clamp(10px,1.4vw,13px); letter-spacing:3px; text-transform:uppercase; color:var(--neon1); opacity:.75; max-width:90vw; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:0 16px; }
+  .chip{ font-size:11px; letter-spacing:.5px; padding:5px 12px; border-radius:20px; opacity:.85;
+    border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.04); }
+  .prompt{ font-size:12px; letter-spacing:2px; text-transform:uppercase; opacity:.5; }
+  button.src{ position:relative; overflow:hidden; }
+  button.src::before{ content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--neon1),var(--neon3)); opacity:.45; transition:opacity .25s; }
+  button.src:hover::before{ opacity:1; }
+  button.src.hot::before{ background:linear-gradient(90deg,var(--neon2),var(--neon3)); opacity:.9; }
 
   /* ---------- HUD / help ---------- */
   #hud{
@@ -96,8 +115,19 @@
 <canvas id="gl"></canvas>
 
 <div id="overlay">
-  <h1>HYPERFRACTAL</h1>
-  <div class="sub">An infinite-zoom fractal universe for raves &amp; projection. Pick how to drive it — or let it generate its own psytrance:</div>
+  <div class="brand">
+    <div class="eqbars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h1>HYPERFRACTAL</h1>
+  </div>
+  <div class="tag">infinite-zoom fractals · live psytrance · audio visualizers · projection mapping</div>
+  <div class="chips">
+    <span class="chip">10 visuals</span>
+    <span class="chip">made of slime</span>
+    <span class="chip">reacts to any sound</span>
+    <span class="chip">map any shape</span>
+    <span class="chip">100% offline</span>
+  </div>
+  <div class="prompt">▾ choose a sound source</div>
   <div class="btns">
     <button class="src hot" data-src="synth"><span class="ico">🎛️</span>Generate Psytrance<small>Built-in live psy jam — no files needed</small></button>
     <button class="src" data-src="file"><span class="ico">🎵</span>Load a Track<small>Play any audio file from your PC</small></button>
