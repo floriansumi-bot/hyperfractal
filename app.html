@@ -5,86 +5,67 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>HyperFractal — Psychedelic Rave Visualizer</title>
 <style>
-  :root{ --neon1:#00f0ff; --neon2:#ff00e6; --neon3:#9b5cff; --neon4:#3bff8f; }
+  :root{ --neon1:#00f0ff; --neon2:#ff00e6; --neon3:#9b5cff; --neon4:#3bff8f;
+    --mono:"JetBrains Mono","Cascadia Code","SF Mono",Consolas,"Liberation Mono",monospace;
+    --fg:#c7d0cc; --acc:#39d0c8; }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ width:100%; height:100%; overflow:hidden; background:#000; }
-  body{ font-family:"Segoe UI",system-ui,Arial,sans-serif; color:#fff; cursor:default; }
+  body{ font-family:var(--mono); color:var(--fg); cursor:default; }
   #gl{ position:fixed; inset:0; width:100%; height:100%; display:block; }
 
-  /* ---------- Start overlay ---------- */
-  #overlay{
-    position:fixed; inset:0; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; gap:16px;
-    background:radial-gradient(circle at 50% 38%, rgba(10,0,30,.28), rgba(0,0,0,.82) 72%);
-    backdrop-filter:blur(2px); transition:opacity .8s ease; z-index:20; text-align:center;
-  }
+  /* ---------- terminal start screen ---------- */
+  #overlay{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(4,5,7,.70); backdrop-filter:blur(3px); transition:opacity .5s ease; z-index:20; padding:20px; }
   #overlay.hidden{ opacity:0; pointer-events:none; }
-  h1{
-    font-size:clamp(34px,7vw,78px); font-weight:800; letter-spacing:2px;
-    background:linear-gradient(90deg,var(--neon1),var(--neon2),var(--neon3),var(--neon4),var(--neon1));
-    background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
-    animation:flow 6s linear infinite; filter:drop-shadow(0 0 22px rgba(155,92,255,.55));
-  }
-  @keyframes flow{ to{ background-position:300% 0; } }
-  .sub{ font-size:clamp(13px,1.8vw,17px); opacity:.82; max-width:680px; line-height:1.5; padding:0 18px; }
-  .btns{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; padding:0 16px; max-width:880px; }
-  button.src{
-    appearance:none; border:1px solid rgba(255,255,255,.18); color:#fff; cursor:pointer;
-    font-size:16px; font-weight:600; padding:16px 20px; border-radius:14px; width:200px;
-    background:rgba(255,255,255,.05); backdrop-filter:blur(8px);
-    transition:transform .15s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
-  }
-  button.src:hover{ transform:translateY(-3px) scale(1.02); border-color:var(--neon1);
-    background:rgba(0,240,255,.10); box-shadow:0 10px 40px rgba(0,240,255,.25); }
-  button.src.hot{ border-color:var(--neon2); background:rgba(255,0,230,.10);
-    box-shadow:0 0 30px rgba(255,0,230,.25); }
-  button.src.hot:hover{ box-shadow:0 10px 44px rgba(255,0,230,.4); }
-  button.src .ico{ font-size:24px; display:block; margin-bottom:6px; }
-  button.src small{ display:block; opacity:.62; font-weight:400; font-size:12px; margin-top:5px; }
-  .legend{ font-size:12px; opacity:.55; margin-top:4px; }
-  .err{ color:#ff7b9c; font-size:13px; max-width:600px; min-height:18px; padding:0 16px; }
-  /* ---------- opening screen extras ---------- */
-  .brand{ display:flex; align-items:center; gap:18px; }
-  .eqbars{ display:flex; align-items:flex-end; gap:4px; height:48px; }
-  .eqbars i{ width:6px; height:12px; border-radius:3px; background:linear-gradient(var(--neon1),var(--neon3));
-    box-shadow:0 0 10px rgba(0,240,255,.45); animation:eq 1.0s ease-in-out infinite; }
-  .eqbars i:nth-child(2){ animation-delay:.12s } .eqbars i:nth-child(3){ animation-delay:.24s }
-  .eqbars i:nth-child(4){ animation-delay:.36s } .eqbars i:nth-child(5){ animation-delay:.48s }
-  .eqbars i:nth-child(6){ animation-delay:.30s } .eqbars i:nth-child(7){ animation-delay:.18s }
-  @keyframes eq{ 0%,100%{ height:10px; opacity:.65 } 50%{ height:44px; opacity:1 } }
-  .tag{ font-size:clamp(10px,1.4vw,13px); letter-spacing:3px; text-transform:uppercase; color:var(--neon1); opacity:.75; max-width:90vw; }
-  .chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:0 16px; }
-  .chip{ font-size:11px; letter-spacing:.5px; padding:5px 12px; border-radius:20px; opacity:.85;
-    border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.04); }
-  .prompt{ font-size:12px; letter-spacing:2px; text-transform:uppercase; opacity:.5; }
-  button.src{ position:relative; overflow:hidden; }
-  button.src::before{ content:""; position:absolute; top:0; left:0; right:0; height:3px;
-    background:linear-gradient(90deg,var(--neon1),var(--neon3)); opacity:.45; transition:opacity .25s; }
-  button.src:hover::before{ opacity:1; }
-  button.src.hot::before{ background:linear-gradient(90deg,var(--neon2),var(--neon3)); opacity:.9; }
+  .term{ width:min(580px,94vw); background:rgba(8,10,12,.94); border:1px solid #1c2230; border-radius:8px;
+    box-shadow:0 30px 90px rgba(0,0,0,.65); overflow:hidden; }
+  .term-bar{ display:flex; align-items:center; gap:7px; padding:9px 13px; background:#0c0f13; border-bottom:1px solid #161b24; }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot:nth-child(1){ background:#e06c5b } .dot:nth-child(2){ background:#d8b34a } .dot:nth-child(3){ background:#5bbf6a }
+  .term-title{ margin-left:8px; font-size:12px; color:#6b7686; }
+  .term-body{ padding:18px 20px 15px; font-size:14px; line-height:1.55; }
+  .boot{ color:#6b7686; font-size:12.5px; white-space:pre-wrap; margin:0 0 16px; }
+  .boot b{ color:var(--acc); font-weight:600; }
+  .cmd{ margin-bottom:9px; color:var(--fg); }
+  .cmd::before{ content:"$ "; color:var(--acc); }
+  .srcs{ display:flex; flex-direction:column; gap:2px; margin-bottom:14px; }
+  button.src{ appearance:none; cursor:pointer; text-align:left; width:100%; font:inherit; font-size:14px; color:var(--fg);
+    background:transparent; border:1px solid transparent; border-radius:5px; padding:9px 12px;
+    display:grid; grid-template-columns:22px 1fr auto; align-items:baseline; gap:10px; transition:background .12s,border-color .12s; }
+  button.src .n{ color:var(--acc); }
+  button.src .hint{ color:#5b6675; font-size:12px; }
+  button.src:hover,button.src:focus-visible{ outline:none; background:rgba(57,208,200,.09); border-color:rgba(57,208,200,.45); }
+  button.src:hover .lbl{ color:#fff; }
+  .err{ color:#e06c5b; font-size:12.5px; min-height:16px; margin-bottom:6px; }
+  .term-foot{ color:#5b6675; font-size:11.5px; border-top:1px solid #161b24; padding-top:10px; }
+  .term-foot b{ color:#8b95a3; font-weight:600; }
+  .cursor{ display:inline-block; color:var(--acc); animation:blink 1.1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0 } }
 
-  /* ---------- HUD / help ---------- */
-  #hud{
-    position:fixed; top:16px; left:16px; z-index:10; font-size:12.5px; line-height:1.65;
-    background:rgba(0,0,0,.38); border:1px solid rgba(255,255,255,.10); border-radius:12px;
-    padding:12px 14px; backdrop-filter:blur(6px); transition:opacity .4s ease; max-width:300px;
-  }
-  #hud.dim{ opacity:0; pointer-events:none; }
-  #hud b{ color:var(--neon1); }
-  #hud kbd{ display:inline-block; min-width:16px; text-align:center; padding:1px 5px; margin:0 1px;
-    border:1px solid rgba(255,255,255,.25); border-bottom-width:2px; border-radius:5px;
-    font-family:inherit; font-size:11px; background:rgba(255,255,255,.06); }
-  #hud .row{ opacity:.85; }
-  #hud .sec{ opacity:.5; margin-top:6px; font-size:10px; letter-spacing:1px; text-transform:uppercase; }
-  #meter{ display:flex; gap:6px; align-items:flex-end; height:30px; margin-top:8px; }
-  #meter .bar{ width:20px; background:linear-gradient(#fff,var(--neon2)); border-radius:3px 3px 0 0; height:2px; }
-  #meter .lbl{ font-size:9px; opacity:.6; text-align:center; }
-  #toast{
-    position:fixed; bottom:26px; left:50%; transform:translateX(-50%); z-index:11;
-    background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.14); border-radius:30px;
-    padding:9px 20px; font-size:14px; opacity:0; transition:opacity .3s ease; backdrop-filter:blur(6px);
-    pointer-events:none; white-space:nowrap;
-  }
+  /* ---------- controls panel (toggleable) ---------- */
+  #ctrlBtn{ position:fixed; left:0; bottom:0; z-index:11; display:none; cursor:pointer; font:inherit; font-size:11px;
+    letter-spacing:1px; color:var(--acc); background:rgba(8,10,12,.92); border:1px solid #1c2230;
+    border-left:0; border-bottom:0; border-top-right-radius:8px; padding:7px 13px; }
+  #ctrlBtn:hover{ background:#0c0f13; color:#fff; }
+  body.started #ctrlBtn{ display:block; }
+  #hud{ position:fixed; top:0; left:0; z-index:12; font-size:12px; line-height:1.75; color:#8b95a3;
+    background:rgba(8,10,12,.95); border-right:1px solid #1c2230; border-bottom:1px solid #1c2230;
+    border-bottom-right-radius:8px; padding:12px 16px 12px 14px; max-width:370px;
+    transform:translateX(-105%); transition:transform .22s ease; }
+  #hud.open{ transform:translateX(0); }
+  #hud.open ~ #ctrlBtn{ display:none; }
+  #hud .hudhead{ color:var(--acc); font-size:11px; letter-spacing:1px; margin-bottom:7px; }
+  #hud .row{ white-space:nowrap; }
+  #hud b{ color:var(--fg); }
+  #hud kbd{ display:inline-block; min-width:15px; text-align:center; padding:0 5px; margin:0 1px;
+    border:1px solid #2a3340; border-radius:4px; font:inherit; font-size:11px; color:var(--acc); background:#0c0f13; }
+  #hud .sec{ color:#5b6675; margin-top:6px; font-size:11px; }
+  #meter{ display:flex; gap:5px; align-items:flex-end; height:26px; margin-top:10px; }
+  #meter .bar{ width:16px; background:var(--acc); opacity:.85; border-radius:1px; height:2px; }
+  #meter .lbl{ font-size:9px; color:#5b6675; text-align:center; margin-top:3px; }
+  #toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:13;
+    background:rgba(8,10,12,.94); border:1px solid #1c2230; border-radius:6px; padding:8px 16px; font-size:13px;
+    color:var(--fg); opacity:0; transition:opacity .25s ease; pointer-events:none; white-space:nowrap; }
   #toast.show{ opacity:1; }
   .hide-cursor{ cursor:none !important; }
 
@@ -115,43 +96,39 @@
 <canvas id="gl"></canvas>
 
 <div id="overlay">
-  <div class="brand">
-    <div class="eqbars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <h1>HYPERFRACTAL</h1>
+  <div class="term">
+    <div class="term-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="term-title">hyperfractal — audio engine</span></div>
+    <div class="term-body">
+<pre class="boot"><b>HYPERFRACTAL</b> v2.0 · fractal audio engine
+webgl · web-audio · 10 visuals · projection-mapped · 100% local</pre>
+      <div class="cmd">select input source</div>
+      <div class="srcs">
+        <button class="src" data-src="synth"><span class="n">1</span><span class="lbl">generate psytrance</span><span class="hint">built-in evolving set</span></button>
+        <button class="src" data-src="file"><span class="n">2</span><span class="lbl">load track</span><span class="hint">audio file</span></button>
+        <button class="src" data-src="system"><span class="n">3</span><span class="lbl">computer audio</span><span class="hint">system / tab</span></button>
+        <button class="src" data-src="mic"><span class="n">4</span><span class="lbl">microphone</span><span class="hint">live input</span></button>
+      </div>
+      <div class="err" id="err"></div>
+      <div class="term-foot"><b>space</b>/<b>1-0</b> visual · <b>M</b> map · <b>H</b> controls · <b>F</b> fullscreen <span class="cursor">▮</span></div>
+    </div>
   </div>
-  <div class="tag">infinite-zoom fractals · live psytrance · audio visualizers · projection mapping</div>
-  <div class="chips">
-    <span class="chip">10 visuals</span>
-    <span class="chip">made of slime</span>
-    <span class="chip">reacts to any sound</span>
-    <span class="chip">map any shape</span>
-    <span class="chip">100% offline</span>
-  </div>
-  <div class="prompt">▾ choose a sound source</div>
-  <div class="btns">
-    <button class="src hot" data-src="synth"><span class="ico">🎛️</span>Generate Psytrance<small>Built-in live psy jam — no files needed</small></button>
-    <button class="src" data-src="file"><span class="ico">🎵</span>Load a Track<small>Play any audio file from your PC</small></button>
-    <button class="src" data-src="system"><span class="ico">🔊</span>Computer Audio<small>Visualize Spotify, a DJ set, YouTube…</small></button>
-    <button class="src" data-src="mic"><span class="ico">🎤</span>Microphone<small>React to the room / live set</small></button>
-  </div>
-  <div class="err" id="err"></div>
-  <div class="legend">Fullscreen <b>F</b> · change visual <b>Space</b> or <b>1–0</b> · projection-map <b>M</b> · all controls <b>H</b></div>
 </div>
 
-<div id="hud" class="dim">
-  <div><b>HYPERFRACTAL</b> &nbsp;<span id="fps">–</span> fps&nbsp; <span id="modeName"></span></div>
-  <div class="row"><kbd>Space</kbd> next &nbsp; <kbd>1</kbd>–<kbd>5</kbd> fractals &nbsp; <kbd>6</kbd>–<kbd>0</kbd> visualizers</div>
-  <div class="row"><kbd>A</kbd> auto-cycle &nbsp; <kbd>P</kbd> skin &nbsp; <kbd>G</kbd> slime &nbsp; <kbd>V</kbd> vortex</div>
-  <div class="row"><kbd>-</kbd><kbd>=</kbd> zoom &nbsp; <kbd>↑</kbd><kbd>↓</kbd> reactivity &nbsp; <kbd>[</kbd><kbd>]</kbd> quality</div>
-  <div class="row"><kbd>M</kbd> map shapes &nbsp; <kbd>R</kbd> reset map &nbsp; <kbd>F</kbd> full &nbsp; <kbd>S</kbd> shot</div>
-  <div class="sec" id="synthRow" style="display:none">Psytrance: <kbd>,</kbd><kbd>.</kbd> tempo &nbsp; <kbd>N</kbd> new pattern</div>
-  <div class="row"><kbd>O</kbd> open track &nbsp; <kbd>H</kbd> hide &nbsp; <kbd>Esc</kbd> menu</div>
+<div id="hud">
+  <div class="hudhead">// hyperfractal · <span id="fps">–</span> fps · <span id="modeName"></span></div>
+  <div class="row"><kbd>space</kbd> next · <kbd>1</kbd>-<kbd>5</kbd> fractals · <kbd>6</kbd>-<kbd>0</kbd> visualizers</div>
+  <div class="row"><kbd>A</kbd> auto · <kbd>P</kbd> skin · <kbd>G</kbd> slime · <kbd>V</kbd> vortex</div>
+  <div class="row"><kbd>-</kbd><kbd>=</kbd> zoom · <kbd>↑</kbd><kbd>↓</kbd> react · <kbd>[</kbd><kbd>]</kbd> quality</div>
+  <div class="row"><kbd>M</kbd> map · <kbd>R</kbd> reset map · <kbd>F</kbd> full · <kbd>S</kbd> shot</div>
+  <div class="sec" id="synthRow" style="display:none"><kbd>,</kbd><kbd>.</kbd> tempo · <kbd>N</kbd> new pattern</div>
+  <div class="row"><kbd>O</kbd> open track · <kbd>H</kbd> hide · <kbd>esc</kbd> menu</div>
   <div id="meter">
-    <div><div class="bar" id="bBass"></div><div class="lbl">BASS</div></div>
-    <div><div class="bar" id="bMid"></div><div class="lbl">MID</div></div>
-    <div><div class="bar" id="bTreb"></div><div class="lbl">HIGH</div></div>
+    <div><div class="bar" id="bBass"></div><div class="lbl">bass</div></div>
+    <div><div class="bar" id="bMid"></div><div class="lbl">mid</div></div>
+    <div><div class="bar" id="bTreb"></div><div class="lbl">high</div></div>
   </div>
 </div>
+<button id="ctrlBtn">[ controls ]</button>
 
 <div id="toast"></div>
 <div id="mapHint">PROJECTION MAPPING — <b>drag</b> dots to fit your surface · <b>click empty space</b> to add a point · <b>double-click</b> a dot to remove · use the <b>toolbar</b> below for shapes &amp; rounding · <b>M</b> when done</div>
@@ -973,7 +950,7 @@ function frame(now){
 
   if(pendingShot){ saveShot(); pendingShot=false; }
 
-  if(!hud.classList.contains("dim")){
+  if(hud.classList.contains("open")){
     bBass.style.height=(2+28*A.bass)+"px"; bMid.style.height=(2+28*A.mid)+"px"; bTreb.style.height=(2+28*A.treb)+"px";
   }
   frames++;
@@ -995,9 +972,8 @@ async function keepAwake(){ try{ if("wakeLock" in navigator) wakeLock=await navi
 document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&started) keepAwake(); });
 
 function begin(label){
-  started=true; overlay.classList.add("hidden"); hud.classList.remove("dim"); errEl.textContent="";
-  toast("Source: "+label); keepAwake();
-  setTimeout(()=>{ if(started&&!mappingMode) hud.classList.add("dim"); },6500);
+  started=true; overlay.classList.add("hidden"); document.body.classList.add("started"); errEl.textContent="";
+  toast("source: "+label); keepAwake();
 }
 async function pick(src){
   errEl.textContent="Starting…";
@@ -1017,6 +993,7 @@ function friendly(src,e){
   return m;
 }
 document.querySelectorAll("button.src").forEach(b=>b.addEventListener("click",()=>pick(b.dataset.src)));
+document.getElementById("ctrlBtn").addEventListener("click",()=>hud.classList.toggle("open"));
 
 window.addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();
@@ -1027,10 +1004,10 @@ window.addEventListener("keydown",e=>{
   else if(k==="f"){ toggleFull(); }
   else if(k==="v"){ spin = spin>0.05?0.0:0.28; toast("Vortex "+(spin>0?"ON":"OFF")); }
   else if(k==="g"){ slimeLevel=(slimeLevel+1)%3; toast("Slime "+["OFF","SOFT","FULL"][slimeLevel]); }
-  else if(k==="h"){ hud.classList.toggle("dim"); }
+  else if(k==="h"){ hud.classList.toggle("open"); }
   else if(k==="o"){ startFile(); }
   else if(k==="s"){ pendingShot=true; toast("Saving screenshot…"); }
-  else if(k==="m"){ setMapping(!mappingMode); if(mappingMode) hud.classList.remove("dim"); toast(mappingMode?"Projection mapping — drag dots, use toolbar":"Mapping done"); }
+  else if(k==="m"){ setMapping(!mappingMode); toast(mappingMode?"mapping — drag dots, use toolbar":"mapping done"); }
   else if(k==="r"){ if(mappingMode) resetMapping(); }
   else if(k==="n"){ Synth.regen(); toast("New psy pattern"); }
   else if(k===","){ if(Synth.output){ toast(Synth.setBPM(Synth.bpm()-1)+" BPM"); } }

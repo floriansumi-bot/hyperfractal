@@ -1,5 +1,5 @@
 /* HyperFractal — offline shell. Network-first for pages so updates show immediately. */
-const CACHE = "hyperfractal-v3";
+const CACHE = "hyperfractal-v4";
 const ASSETS = [
   "./",
   "./index.html",
